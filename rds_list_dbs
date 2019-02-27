@@ -1,0 +1,14 @@
+# https://www.youtube.com/watch?v=IDkQwHdYLDQ
+
+import boto3
+rds = boto3.client('rds')
+
+try:
+	dbs = rds.describe_db_instances()
+	for db in dbs['DBInstances']:
+		print(db['MasterUsername'])
+		print(db['Endpoint']['Address'])
+		print(db['Endpoint']['Port'])
+
+except Exception as e:
+	print(e)
