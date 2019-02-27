@@ -1,0 +1,10 @@
+# https://www.youtube.com/watch?v=IDkQwHdYLDQ
+import boto3
+rds = boto3.client('rds')
+
+response = rds.delete_db_instance(
+	DBInstanceIdentifier = 'mysql-instance1',
+	SkipFinalSnapshot = True
+)
+
+print(response)
