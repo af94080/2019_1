@@ -1,0 +1,67 @@
+# object comparisons
+
+# https://www.linkedin.com/learning/advanced-python/object-comparisons
+
+
+class Employee():
+    def __init__(self, fname, lname, level, yrsService):
+        self.fname = fname
+        self.lname = lname
+        self.level = level
+        self.yrsService = yrsService
+
+    def __ge__(self, other):
+        if self.level == other.level:
+            return self.yrsService >= other.yrsService
+        return self.level >= other.level
+
+    def __gt__(self, other):
+        if self.level == other.level:
+            return self.yrsService > other.yrsService
+        return self.level > other.level
+
+    def __lt___(self, other):
+        if self.level == other.level:
+            return self.yrsService < other.yrsService
+        return self.level < other.level
+
+    def __le__(self, other):
+        if self.level == other.level:
+            return self.yrsService <= other.yrsService
+        return self.level <= other.level
+
+    def __str__(self):
+        return f'{self.fname} at Level {self.level} with {self.yrsService} years'
+
+def main():
+    # define some employees
+    dept = []
+
+    dept.append(Employee("Tim", "Sims", 5, 9))
+    dept.append(Employee("John", "Doe", 4, 12))
+    dept.append(Employee("Jape", "Smith", 6, 6))
+    dept.append(Employee("Rebecca", "Robinson", 5, 13))
+    dept.append(Employee("Tyler", "Durden", 5, 12))
+
+    # whos more senior
+    print(dept[0] > dept[2])
+    print(dept[4] < dept[3])
+
+    # sort the items:
+    emps = sorted(dept)
+    for emp in emps:
+        print(emp)
+
+
+if __name__ == '__main__':
+    main()
+
+'''output:
+False
+True
+John at Level 4 with 12 years
+Tim at Level 5 with 9 years
+Tyler at Level 5 with 12 years
+Rebecca at Level 5 with 13 years
+Jape at Level 6 with 6 years
+'''
