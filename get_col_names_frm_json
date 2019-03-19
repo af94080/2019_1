@@ -1,0 +1,14 @@
+import json
+from pprint import pprint # not necessary but just in case
+fpath = r'C:\Users\arul.francis\Documents\S3_files\Account.json'
+
+# read the json file
+
+with open(fpath, encoding='utf-8') as f:
+    data = json.load(f)
+
+# take just the first row and print only the col names
+
+for row in data[:1]:
+    for key, val in row.items():
+        print(key)   
