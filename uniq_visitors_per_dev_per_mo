@@ -1,0 +1,57 @@
+# question 2: How many unique visitors per device type per month? 
+#     User Agent to Device type Mapping can be found in 'user_agent_map.csv'
+
+import pandas as pd
+
+# 1. if the file isn't huge try using pandas : 8310
+
+import os
+file_size_bytes = os.path.getsize('input_data.csv')
+print(file_size_bytes)
+
+# 8310
+
+# 2. read in two csvs and combine them
+
+visits_raw = pd.read_csv('input_data.csv')
+uamap_raw = pd.read_csv('user_agent_map.csv')
+
+# 3. merge the two data frames
+visits = pd.merge(visits_raw, uamap_raw, on='user_agent', how='outer')
+
+# 4. calculate a month and a month-year col and add those to the data frame
+
+visits['page_view_mon'] = pd.DatetimeIndex(visits['page_view_dt']).month
+visits['month_year'] = pd.to_datetime(visits['page_view_dt']).dt.to_period('M')
+
+# inspect the data 
+visits.head()
+
+# 5. group by device type and month year get the unique visitor id count:
+
+print(visits.groupby(['device_type', 'month_year'])['visitor_id'].nunique())
+
+'''device_type  month_year
+Desktop      2018-01       8
+             2018-02       7
+             2018-03       3
+             2018-04       2
+             2018-05       3
+             2018-06       4
+             2018-07       2
+             2018-08       6
+             2018-09       6
+             2018-10       4
+             2018-11       8
+             2018-12       6
+Mobile       2018-01       2
+             2018-02       5
+             2018-03       3
+             2018-04       4
+             2018-05       5
+             2018-06       1
+             2018-07       4
+             2018-09       4
+             2018-10       8
+             2018-11       5
+             '''
