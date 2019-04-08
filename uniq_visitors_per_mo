@@ -1,0 +1,50 @@
+# 1. set up an iterator to process a row and avoid reading whole file into memory
+
+import csv
+input_file = 'input_data.csv'
+
+def read_data(path):
+    with open(path) as data:
+        reader = csv.DictReader(data)
+        for row in reader:
+            yield(row)
+
+# 2. build a uniq set of visitor_ids and month
+
+visitor_month = set()
+
+for idx, row in enumerate(read_data(input_file)):
+    # the date is coming in as  '2018-02-01' after DictReader parses it
+    # split the date into y m d
+    year, month, day = row['page_view_dt'].split('-')
+
+    # make a unique combination of visitors and months
+    visitor_month.add((row['visitor_id'], month))      
+
+# 3. set up a counter by month
+
+from collections import Counter
+total_by_month = Counter()
+
+for row in visitor_month:
+    month = row[1]
+    total_by_month[row[1]] += 1
+
+# 4. output the nbr of unique visitors within each month
+
+for month in sorted(total_by_month):
+    print(f'Month {month} had {total_by_month[month]} unique visitors')
+
+'''Month 01 had 10 unique visitors
+Month 02 had 12 unique visitors
+Month 03 had 6 unique visitors
+Month 04 had 6 unique visitors
+Month 05 had 8 unique visitors
+Month 06 had 5 unique visitors
+Month 07 had 6 unique visitors
+Month 08 had 6 unique visitors
+Month 09 had 10 unique visitors
+Month 10 had 12 unique visitors
+Month 11 had 13 unique visitors
+Month 12 had 6 unique visitors
+'''
