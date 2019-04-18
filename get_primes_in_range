@@ -1,0 +1,18 @@
+def is_prime(candidate):
+    return all(
+        candidate % n != 0
+        for n in range(2, candidate)
+    )
+
+def get_primes_in_range(start, end):
+    for nbr in range(start, end+1):
+        if is_prime(nbr):
+            yield nbr    
+            
+# how much time?
+# %timeit result = list(get_primes_in_range(1,10))
+# 11.5 µs ± 3.89 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+
+result = list(get_primes_in_range(1000,1000000))
+
+print(result)
