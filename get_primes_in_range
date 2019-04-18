@@ -16,3 +16,10 @@ def get_primes_in_range(start, end):
 result = list(get_primes_in_range(1000,1000000))
 
 print(result)
+
+
+# write to a file
+
+for output in get_primes_in_range(1000,1000000):
+    with open('primes_output.txt', 'a') as a_writer:
+        a_writer.write(f'\n{output}')
