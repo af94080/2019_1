@@ -1,0 +1,17 @@
+select 
+ de.event_id, 
+de.sub_type_details,
+split_part(de.sub_type_details,';',rownum.num) as sub_type_details_split
+from 
+	(select 
+	event_id,
+	regexp_count(sub_type_details,';') + 1::integer as nbr_of_delims,
+	sub_type_details
+	FROM dims.d_event) de
+join 
+(select row_number() over (order by true)::int as num
+from dims.d_event limit 20) 
+rownum
+on rownum.num <= de.nbr_of_delims
+and event_id in ('00U8000000rqWlPEAU', '00U8000000qL3rdEAC')
+order by event_id, rownum.num;
