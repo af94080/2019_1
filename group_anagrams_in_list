@@ -1,0 +1,36 @@
+input = ["cat","act","madam","mmaad","try","cat"]
+
+# expected output
+# output = [("cat","act") , ("madam","mmaad"), ("try")]
+
+# program
+
+def word_srtd(w):
+	return "".join(sorted(w))	
+
+d = {}
+
+while input:
+	ele = input.pop()
+	key = word_srtd(ele)
+	if key not in d:
+		d[key] = []
+	d[key].append(ele)
+	# print(ele)
+	# print(d)
+
+# take just the values of the dictionary and ignore the keys
+
+out = d.values()
+
+# but they still contain dups so dedup the values 
+
+out_deduped = [tuple(set(ele)) for ele in out]
+
+print(out_deduped)
+
+# [('madam', 'mmaad'), ('try',), ('act', 'cat')]
+
+
+
+
