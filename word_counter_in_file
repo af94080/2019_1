@@ -1,0 +1,86 @@
+
+
+
+# 3. pull down file content as list of lines:
+
+def get_text_from_url():
+    import urllib.request
+    alice = 'https://s3.amazonaws.com/curology-public/alice-in-wonderland.txt'
+    with urllib.request.urlopen(alice) as f:
+        lines_in_file = f.readlines()
+
+    print(len(lines_in_file))
+
+    # the raw text has bytes
+    lines_in_file = [line.decode('utf-8').strip() for line in lines_in_file]
+
+    # i'm only interested in the actual text of the book so find the start and end lines
+    start_line_pattern = 'START OF THIS PROJECT GUTENBERG EBOOK'
+
+    end_line_pattern = 'End of Project'
+
+    for idx, line in enumerate(lines_in_file):
+        if start_line_pattern in line:
+            start_line  = idx + 1
+
+        if end_line_pattern in line:
+            end_line  = idx
+            break
+
+    print(start_line)        
+    print(end_line)        
+
+    text= lines_in_file[start_line:end_line]
+
+    print('first line of actual text')
+    print(text[0])
+
+    print('last line of actual text')
+    print(text[-1])
+
+    # remove blank lines
+    text_no_blank_lines = list(filter(None,text))
+
+    print('row count of text as is')
+    print(len(text))
+
+    print('row count after blank lines removed')
+    print(len(text_no_blank_lines))
+
+    return text_no_blank_lines
+
+data =   get_text_from_url()
+
+#4. this isnt working
+
+def yield_words_from_line(l):
+    for word in l.split():
+        yield word
+
+words = []
+# debug: just look at the words
+for line in data:
+    for word in line.split():
+        words.append(word)
+            
+# words  = [word for word in yield_words_from_line(line) for line in data]   
+
+print(f'The number of words in actual text is: {len(words)}')
+
+#5. most common words
+
+from collections import Counter
+
+print(Counter(words).most_common(10))
+
+# 6. build list of contiguous word pairs
+
+pairs_of_words = []
+
+for i in range(len(words)):
+    if i < len(words) - 1:
+        pairs_of_words.append((words[i], words[i+1]))
+
+from collections import Counter
+
+print(Counter(pairs_of_words).most_common(10))
