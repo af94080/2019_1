@@ -1,0 +1,107 @@
+import mysql.connector as mysql
+import json
+
+#1. connect to mysql db
+def get_cnxn_creds():
+	creds_file = r'C:\Users\afrancis038\Documents\creds\mysql_creds_glbtt.json'
+
+	with open(creds_file, 'r') as f:
+	    creds = json.load(f)
+
+	return creds
+
+  
+
+def conn_to_db(gb_host, gb_user, gb_passwd):
+	db = mysql.connect(
+    host = gb_host,
+    user = gb_user,
+    passwd = gb_passwd)
+
+    return db
+
+#2 create a table
+def prep_sql_stmts():
+	# stmt1 = 'use gbltt;'
+
+	# stmt2 = 'drop table if exists gbltt.zz_af_parse_rows'
+
+	stmt3 = '''create table gbltt.zz_af_parse_rows
+	(
+	ID MEDIUMINT NOT NULL AUTO_INCREMENT,
+	logdate date ,
+	message_id VARCHAR(100),
+	from_msg  VARCHAR(100),
+	to_msg  VARCHAR(100),
+	cc  VARCHAR(100),
+	bcc  VARCHAR(100),
+	reply_to  VARCHAR(100),
+	sender  VARCHAR(100),
+	subject  VARCHAR(100),
+	filename  VARCHAR(100),
+	mime_type  VARCHAR(100),
+	disposition  VARCHAR(100),
+	PRIMARY KEY (ID)
+	);'''
+
+	return stmt3
+
+#3 exec stmt
+def exec_db_stmt(db, sql_stmt):
+	cursor = db.cursor()
+	cursor.execute(stmt1)
+
+
+
+#4 
+
+data = [
+    {"logdate": "1979-12-31 16:00:00", "message_id" : "530637.1075846150302.JavaMail.evans@thyme", "from" : "steven.kean@enron.com", "to" : "j.metts@enron.com", "cc" : "kelly.kimberly@enron.com", "bcc" : "kelly.kimberly@enron.com", "reply_to" : "", "sender" : "", "subject" : "Re: FW: Jim Bannantine on eSpeak - March 23", "filename" : "", "mime_type" : "text/plain", "disposition_type" : ""
+}, 
+{"logdate": "1979-12-31 16:00:00", "message_id" : "3932628.1075846142843.JavaMail.evans@thyme", "from" : "steven.kean@enron.com", "to" : "mary.clark@enron.com", "cc" : "", "bcc" : "", "reply_to" : "", "sender" : "", "subject" : "Re: Trains - Light rail", "filename" : "", "mime_type" : "text/plain", "disposition_type" : ""
+}, 
+{"logdate": "1979-12-31 16:00:00", "message_id" : "4299517.1075846171583.JavaMail.evans@thyme", "from" : "steven.kean@enron.com", "to" : "", "cc" : "", "bcc" : "", "reply_to" : "", "sender" : "", "subject" : "", "filename" : "", "mime_type" : "text/plain", "disposition_type" : ""
+}
+]
+
+# 4 ins row
+
+def prep_ins_val(data):
+    for row in data:
+#     print(row['message_id'], 
+#           row['from'], 
+#            row['to']
+#          )
+        col1 = row['message_id']
+        col2 = row['from']
+        col3 = row['to']
+        delim = ","
+        cols = col1 + delim + col2 + delim +  col3
+        print(cols)
+        s = col1 + col2 + col3
+        return s
+
+#5
+
+ins_val(data)
+
+
+def main():
+	# get creds from file
+	creds = get_cnxn_creds()
+
+	# parse creds
+	gb_host = creds['DBHOST']
+	gb_user = creds['USER']
+	gb_passwd = creds['PW']  	
+
+	# connect to db
+	db = conn_to_db(gb_host, gb_user, gb_passwd)
+
+	# just prepare one sql stmt
+	sql = prep_sql_stmts()
+
+	# exec the sql stmt
+	exec_db_stmt(db, sql)
+
+
