@@ -1,0 +1,33 @@
+select
+md5(ROW(username, amt)::TEXT) as hash_name_amt,
+txn_id,
+username,
+address,
+amt,
+modtime
+from txn;
+
+/* OUTPUT
+
+address                     |  amt   |          modtime           
+----------------------------------+--------+--------------+-------------------------------------------------+--------+----------------------------
+ 54d342c21b6779019bc3bac8162657ac |    101 | jdoe         | 100 Main St Apt 3 San Francisco CA 94114        |    125 | 
+ ada2952703353c0f58618c3422b897aa |    102 | rsmith       | 212 California St Apt 13 San Francisco CA 94102 |    621 | 2020-07-15 14:42:36.263438
+ 8c6b708c915d34a43e3b3b4c6bb7e0a4 |    103 | nmadulapally | 1000 Pennsylvania Ave Washington DC             | 200000 | 2020-07-15 14:43:30.554576
+(3 rows)
+*/
+
+create table txn
+(
+txn_id integer,
+username VARCHAR (255),
+ADDRESS        VARCHAR(255),
+modtime   timestamp DEFAULT current_timestamp,
+amt integer
+);
+
+insert into
+txn (txn_id, username, address, amt)
+values
+(102, 'rsmith', '212 California St Apt 13 San Francisco CA 94102',621)
+;
